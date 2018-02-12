@@ -212,7 +212,8 @@ function generateRunicWords(runicTable, wordLength) {
   // There are 33 1-rune runic words in the 33-sized runic table.
   if (wordLength == 1) {
     combs = runicTable.map(ele => ({word: ele.rune, power: ele.power})).sort(compareNumbers);
-    return combs;
+    partialCombs = combs.slice(0, numberOfOutputWords);
+    return partialCombs;
   }
 
   // 33-sized runic table has only one 33-sized runic word.
