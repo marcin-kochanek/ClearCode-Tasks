@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CCFrontTask1</title>
+  <style>
+    
+  /* CSS variables */
+    :root {
+      --color-background: #FFFF99;
+      --color-list-background: #EEEEEE;
+      --color-text-1: #666666;
+      --color-text-2: #000000;
+      --color-accent: #999999;
+
+      --corner-radius: 5px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-background);
+      font-family: Arial;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      height: 100vh;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .list {
+      list-style: none;
+      
+      display: flex;
+      flex-direction: column;
+    }
+
+    .list__item {
+      background-color: var(--color-list-background);
+      padding: 5px;
+      border: 1px solid var(--color-accent);
+      box-shadow: 2px 2px 5px var(--color-accent);
+      
+      display: flex;
+      justify-content: space-between;
+    }
+
+  /* Odd list items */
+    .list__item:nth-child(odd) {
+      border-radius: var(--corner-radius) 0 0 var(--corner-radius);
+      margin: 0 10px 0 -10px;
+    }
+
+    .list__item:nth-child(odd).list__item:last-child {
+      border-radius: var(--corner-radius) 0 var(--corner-radius) var(--corner-radius);
+    }
+
+    .list__item:nth-child(odd) > .list__text:first-child {
+      font-weight: normal;
+      color: var(--color-text-1);
+    }
+
+    .list__item:nth-child(odd) > .list__text:last-child {
+      font-weight: bold;
+      color: var(--color-text-2);
+    }
+
+    /* Even list items */
+    .list__item:nth-child(even) {
+      border-radius: 0 var(--corner-radius) var(--corner-radius) 0;
+      margin: -1px -10px -1px 10px;
+    }
+
+    .list__item:nth-child(even).list__item:last-child {
+      border-radius: 0 var(--corner-radius) var(--corner-radius) var(--corner-radius);
+    }
+
+    .list__item:nth-child(even) > .list__text:first-child {
+      font-weight: normal;
+      color: var(--color-text-2);
+    }
+
+    .list__item:nth-child(even) > .list__text:last-child {
+      font-weight: bold;
+      color: var(--color-text-1);
+    }
+
+  /* First list item*/
+    .list__item:first-child {
+      border-radius: var(--corner-radius) var(--corner-radius) 0 var(--corner-radius);
+    }
+
+    .list__text:first-child {
+      overflow: hidden; 
+      white-space: nowrap; 
+      text-overflow: ellipsis;
+    }
+
+  /* Last list item*/
+    .list__text:last-child {
+      padding-left: 8px;
+      white-space: nowrap;
+    }
+
+  /* Media queries manager */
+    @media only screen and (min-width: 1500px) {
+      .list { width: 32vw; } 
+    }
+
+    /*@media only screen and (max-width: 899px) {
+      .list { width: 46.33vw; } 
+    }*/
+
+    @media only screen and (max-width: 600px) {
+      .list { width: 45vw; } 
+    }
+    
+    @media only screen and (max-width: 250px) {
+      .list { width: 71vw; } 
+    }
+
+  </style>
+</head>
+<body>
+  <ul class="list">
+    <li class="list__item">
+      <span class="list__text">Short text</span>
+      <span class="list__text">Is short</span>
+    </li>
+    <li class="list__item">
+      <span class="list__text">A little bit longer text</span>
+      <span class="list__text">Is longer</span>
+    </li>
+    <li class="list__item">
+      <span class="list__text">Also a little bit longer</span>
+      <span class="list__text">Yes it is</span>
+    </li>
+    <li class="list__item">
+      <span class="list__text">A long text is here, totally for no reason</span>
+      <span class="list__text">Is long.</span>
+    </li>
+    <li class="list__item">
+      <span class="list__text">A long text is here also, for the same reason</span>
+      <span class="list__text">Is long too!</span>
+    </li>
+    <li class="list__item">
+      <span class="list__text">OK</span>
+      <span class="list__text">OK</span>
+    </li>
+  </ul>
+</body>
+</html>
