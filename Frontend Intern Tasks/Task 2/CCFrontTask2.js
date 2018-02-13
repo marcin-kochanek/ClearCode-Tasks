@@ -163,15 +163,36 @@ const runicTable = [
     rune: 'Zod',
     power: 19,
     enemy: 'Jah'
-  }
+  } 
 ];
 
 /////// The first function ///////
 function generateRunicWords(runicTable, wordLength) {
   var runicTable;
-  let i, j, combs = [], headRune, restRunes, tailcombs, helpArray, runicWord, partialCombs, runicObjects = [];
+  let i, j, combs = [], headRune, restRunes, tailcombs, helpArray, partialCombs, runicObjects = [];
   const numberOfOutputWords = 10;
 
+  // Function sorting runes in runic word by power (most powerful rune goes first)
+  function sortRunes(arr) {
+    let first, second, runicWord;
+
+    return arr.map(ele => ({word: ele.rune || ele.word, power: ele.power, enemy: ele.enemy})).reduce( (prev, next) => {
+      if (!prev.word) {
+        return {word: `${next.word}`, power: next.power - 1, enemy: `${next.enemy}`};
+      } else {
+        runicWord = `${prev.word}-${next.word}`.split(`-`);
+        runicWord.sort( (a, b) => {
+          first = runicTable.find( obj => obj.rune == a);
+          second = runicTable.find( obj => obj.rune == b);
+          return parseInt(second.power,10) - parseInt(first.power,10);
+        });          
+        runicWord = runicWord.join(`-`);
+        return {word: `${runicWord}`, power: prev.power + next.power - 1, enemy: `${prev.enemy}-${next.enemy}`};
+      }
+    }, {});
+  }
+
+  // Function that defines a descending sort order. 
   function compareNumbers(a, b) {
     return parseInt(b.power,10) - parseInt(a.power,10);
   }
@@ -194,7 +215,7 @@ function generateRunicWords(runicTable, wordLength) {
   if (!Number.isInteger(wordLength)) {
     return console.log(`Input value must be integer. Please try again.`);
   }
-  
+
   if (wordLength === undefined) {
     return console.log(`Input value cannot be empty.`);
   }
@@ -218,27 +239,19 @@ function generateRunicWords(runicTable, wordLength) {
 
   // 33-sized runic table has only one 33-sized runic word.
   if (wordLength === runicTable.length) {
-    runicObjects = runicTable.map(ele => ({word: ele.rune || ele.word, power: ele.power, enemy: ele.enemy})).reduce( (prev, next) => {
-      if (!prev.word) {
-        return {word: `${next.word}`, power: next.power - 1, enemy: `${next.enemy}`};
-      } else {
-        runicWord = `${prev.word}-${next.word}`.split(`-`).sort();            
-        runicWord = runicWord.join(`-`);
-        return {word: `${runicWord}`, power: prev.power + next.power - 1, enemy: `${prev.enemy}-${next.enemy}`};
-      }
-    }, {});
+    runicObjects = sortRunes(runicTable);
     checkRunicConflict(runicObjects);
   }
 
   if (wordLength !== runicTable.length) {
     for (i = 0; i < runicTable.length - wordLength + 1; i++) {
-      
+
       // headRune includes only current rune/element
       headRune = runicTable.slice(i, i + 1);
 
       // restRunes includes the subsequent runes/elements
       restRunes = runicTable.slice(i + 1);
-    
+
       // We take smaller combinations from the subsequent runes/elements
       tailcombs = generateRunicWords(restRunes, wordLength - 1);
       if (!Array.isArray(tailcombs)) {
@@ -248,23 +261,16 @@ function generateRunicWords(runicTable, wordLength) {
       // For each (wordLength-1)-combination we join it with the current and store it to the runic table of wordLength-combinations.
       for (j = 0; j < tailcombs.length; j++) {
         helpArray = headRune.concat(tailcombs[j]);
-
-        runicObjects = helpArray.map(ele => ({word: ele.rune || ele.word, power: ele.power, enemy: ele.enemy})).reduce( (prev, next) => {
-          if (!prev.word) {
-            return {word: `${next.word}`, power: next.power - 1, enemy: `${next.enemy}`};
-          } else {
-            runicWord = `${prev.word}-${next.word}`.split(`-`).sort();            
-            runicWord = runicWord.join(`-`);
-            return {word: `${runicWord}`, power: prev.power + next.power - 1, enemy: `${prev.enemy}-${next.enemy}`};
-          }
-        }, {});
+        runicObjects = sortRunes(helpArray);
         checkRunicConflict(runicObjects);
       }
     }
   }
-
+  // Method for sorting runic words by their power (most powerful word goes first);
   combs.sort(compareNumbers);
 
+
+  // Showing output an Array of 10 (numberOfOutputWords) most powerful valid runic words
   partialCombs = combs.slice(0, numberOfOutputWords);
   return partialCombs;
 }
@@ -273,7 +279,7 @@ function generateRunicWords(runicTable, wordLength) {
 function checkRunicWord(runicWord) {
   let runesArray, sum, runicObject; 
   const powers = [];
-  
+
   if (Number.isInteger(runicWord)) {
     return console.log(`Input value must be string. Please try again.`);
   }
